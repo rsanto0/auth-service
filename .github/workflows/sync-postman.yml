@@ -67,12 +67,21 @@ jobs:
         else
           
           echo "🆕 Collection não existe - criando nova..."
+          
+          # Debug: mostra o JSON que será enviado
+          echo "📋 JSON a ser enviado:"
+          cat wrapped_collection.json | head -20
+          
           RESPONSE=$(curl -X POST \
             "https://api.getpostman.com/collections" \
             -H "X-API-Key: $POSTMAN_API_KEY" \
             -H "Content-Type: application/json" \
             -d @wrapped_collection.json \
-            --fail-with-body)
+            -w "\nHTTP Status: %{http_code}\n" \
+            --fail-with-body || echo "Erro na criação da collection")
+          
+          echo "📋 Resposta da API:"
+          echo "$RESPONSE"
           
           NEW_ID=$(echo "$RESPONSE" | jq -r '.collection.id // .collection.uid')
           echo "✅ Collection criada com ID: $NEW_ID"
