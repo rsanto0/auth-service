@@ -2,6 +2,10 @@
 
 Microserviço de autenticação desenvolvido em Spring Boot para gerenciamento de usuários e tokens JWT.
 
+[![Postman Sync](https://github.com/rsanto0/auth-servicey/actions/workflows/sync-postman.yml/badge.svg?branch=main)](https://github.com/rsanto0/auth-servicey/actions/workflows/sync-postman.yml)
+[![GitHub release](https://img.shields.io/github/v/release/rsanto0/auth-servicey)](https://github.com/rsanto0/auth-servicey/releases)
+[![License](https://img.shields.io/github/license/rsanto0/auth-servicey)](https://github.com/rsanto0/auth-servicey/blob/main/LICENSE)
+
 ## 🚀 Tecnologias
 
 - **Java 17**
