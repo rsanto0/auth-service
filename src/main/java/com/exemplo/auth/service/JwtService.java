@@ -18,6 +18,13 @@ public class JwtService {
     @Value("${jwt.expiration}")
     private Long expiration;
     
+    /**
+     * Gera token JWT com claims personalizados
+     * @param login nome de usuário (subject)
+     * @param role papel do usuário (ADMIN/FUNCIONARIO)
+     * @param userId ID único do usuário
+     * @return token JWT assinado
+     */
     public String generateToken(String login, String role, Long userId) {
         return Jwts.builder()
                 .subject(login)
@@ -29,6 +36,12 @@ public class JwtService {
                 .compact();
     }
     
+    /**
+     * Valida e extrai claims de um token JWT
+     * @param token JWT a ser validado
+     * @return claims do token se válido
+     * @throws JwtException se token inválido/expirado
+     */
     public Claims validateToken(String token) {
         return Jwts.parser()
                 .verifyWith(getSigningKey())
@@ -37,6 +50,10 @@ public class JwtService {
                 .getPayload();
     }
     
+    /**
+     * Gera chave de assinatura HMAC a partir do secret
+     * @return chave secreta para assinar/validar tokens
+     */
     private SecretKey getSigningKey() {
         return Keys.hmacShaKeyFor(secret.getBytes());
     }

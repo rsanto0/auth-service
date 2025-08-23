@@ -20,11 +20,19 @@ public class AuthController {
     private final UserRepository userRepository;
     private final JwtService jwtService;
     
+    /**
+     * Construtor com injeção de dependências
+     */
     public AuthController(UserRepository userRepository, JwtService jwtService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
     }
     
+    /**
+     * Autentica usuário e gera token JWT
+     * @param request dados de login (login/senha)
+     * @return token JWT + dados do usuário ou 401 se inválido
+     */
     @PostMapping("/login")
     public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest request) {
         logger.info("[LOGIN] Tentativa de autenticação - Login: {}", request.getLogin());
@@ -47,6 +55,11 @@ public class AuthController {
         return ResponseEntity.ok(new AuthResponse(token, user.getLogin(), user.getRole().name(), user.getId()));
     }
     
+    /**
+     * Valida token JWT e retorna claims
+     * @param authHeader header Authorization com Bearer token
+     * @return claims do token ou 401 se inválido
+     */
     @PostMapping("/validate")
     public ResponseEntity<Claims> validate(@RequestHeader("Authorization") String authHeader) {
         logger.debug("[VALIDATE] Validando token JWT");
@@ -66,6 +79,11 @@ public class AuthController {
         }
     }
     
+    /**
+     * Cria novo usuário no sistema
+     * @param user dados do usuário (login, senha, nome, cpf, role)
+     * @return usuário criado com ID gerado
+     */
     @PostMapping("/users")
     public User createUser(@RequestBody User user) {
         logger.info("[CREATE_USER] Iniciando criação de usuário - Login: {}, Role: {}", 
