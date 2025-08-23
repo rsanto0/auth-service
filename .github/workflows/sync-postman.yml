@@ -1,0 +1,50 @@
+name: Sync Postman Collection
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - '**/*-postman.json'
+  workflow_dispatch:
+
+jobs:
+  sync-postman:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+      
+    - name: Find Postman Collection
+      id: find-collection
+      run: |
+        COLLECTION=$(find . -name "*-postman.json" | head -1)
+        if [ -z "$COLLECTION" ]; then
+          echo "❌ Nenhuma collection *-postman.json encontrada"
+          exit 1
+        fi
+        echo "collection=$COLLECTION" >> $GITHUB_OUTPUT
+        echo "✅ Collection encontrada: $COLLECTION"
+        
+    - name: Update Postman Collection
+      env:
+        POSTMAN_API_KEY: ${{ secrets.POSTMAN_API_KEY }}
+        COLLECTION_FILE: ${{ steps.find-collection.outputs.collection }}
+      run: |
+        # Extrai collection ID do arquivo (assumindo que está no nome ou metadata)
+        COLLECTION_ID=$(jq -r '.info.uid // .info._postman_id' "$COLLECTION_FILE")
+        
+        if [ "$COLLECTION_ID" = "null" ] || [ -z "$COLLECTION_ID" ]; then
+          echo "❌ Collection ID não encontrado no arquivo"
+          exit 1
+        fi
+        
+        # Atualiza collection no Postman
+        curl -X PUT \
+          "https://api.getpostman.com/collections/$COLLECTION_ID" \
+          -H "X-API-Key: $POSTMAN_API_KEY" \
+          -H "Content-Type: application/json" \
+          -d @"$COLLECTION_FILE" \
+          --fail-with-body
+          
+        echo "✅ Collection sincronizada com sucesso!"
