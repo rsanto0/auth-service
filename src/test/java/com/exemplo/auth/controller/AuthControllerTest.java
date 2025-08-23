@@ -91,29 +91,5 @@ class AuthControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    @Test
-    void createUser_ValidUser_ReturnsUser() throws Exception {
-        User user = new User();
-        user.setLogin("newuser");
-        user.setSenha("password");
-        user.setNome("New User");
-        user.setRole(Role.FUNCIONARIO);
 
-        User savedUser = new User();
-        savedUser.setId(1L);
-        savedUser.setLogin("newuser");
-        savedUser.setSenha("password");
-        savedUser.setNome("New User");
-        savedUser.setRole(Role.FUNCIONARIO);
-
-        when(userRepository.save(any(User.class))).thenReturn(savedUser);
-
-        mockMvc.perform(post("/auth/users")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(user)))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").value(1))
-                .andExpect(jsonPath("$.login").value("newuser"))
-                .andExpect(jsonPath("$.nome").value("New User"));
-    }
 }

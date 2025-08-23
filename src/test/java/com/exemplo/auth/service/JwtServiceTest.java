@@ -2,7 +2,7 @@ package com.exemplo.auth.service;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.security.SignatureException;
+import io.jsonwebtoken.MalformedJwtException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.context.TestPropertySource;
@@ -46,7 +46,7 @@ class JwtServiceTest {
     void validateToken_InvalidJWT_ThrowsException() {
         String invalidToken = "invalid.jwt.token";
         
-        assertThrows(SignatureException.class, () -> {
+        assertThrows(MalformedJwtException.class, () -> {
             jwtService.validateToken(invalidToken);
         });
     }

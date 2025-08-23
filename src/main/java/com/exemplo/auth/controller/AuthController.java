@@ -85,34 +85,5 @@ public class AuthController {
         }
     }
     
-    /**
-     * Cria novo usuário no sistema
-     * @param user dados do usuário (login, senha, nome, cpf, role)
-     * @return usuário criado com ID gerado
-     */
-    @PostMapping("/users")
-    public User createUser(@RequestBody User user) {
-        logger.info("[CREATE_USER] 👥 Iniciando criação de usuário - Login: {}, Role: {}", 
-                   user.getLogin(), user.getRole());
-        
-        // Verificar se usuário já existe
-        User existingUser = userRepository.findByLogin(user.getLogin());
-        if (existingUser != null) {
-            logger.warn("[CREATE_USER] ⚠️ Usuário já existe - Login: {}", user.getLogin());
-            throw new RuntimeException("Usuário já existe");
-        }
-        
-        try {
-            logger.debug("[CREATE_USER] 💾 Salvando usuário no banco de dados");
-            User savedUser = userRepository.save(user);
-            
-            logger.info("[CREATE_USER] ✅ Usuário criado com sucesso - ID: {}, Login: {}, CPF: {}", 
-                       savedUser.getId(), savedUser.getLogin(), savedUser.getCpf());
-            return savedUser;
-        } catch (Exception e) {
-            logger.error("[CREATE_USER] ❌ Erro ao criar usuário - Login: {}, Erro: {}", 
-                        user.getLogin(), e.getMessage());
-            throw e;
-        }
-    }
+
 }
