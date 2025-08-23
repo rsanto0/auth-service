@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "auth-service-collection",
+		"_postman_id": "d95ee750-17c0-4d1e-881e-ec21d9ca67dc",
 		"name": "Auth Service API",
 		"description": "Collection para testar endpoints do microserviço de autenticação - v1.1",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
